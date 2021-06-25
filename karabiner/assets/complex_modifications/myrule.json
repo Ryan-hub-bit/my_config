@@ -1,0 +1,53 @@
+{
+    "title": "my rules",
+    "rules": [{
+            "description": "ctrl+g to del",
+            "manipulators": [{
+                "type": "basic",
+                "from": {
+                    "key_code": "g",
+                    "modifiers": {
+                        "mandatory": ["control"],
+                        "optional": ["caps_lock"]
+                    }
+                },
+                "to": [{
+                    "key_code": "delete_or_backspace"
+                }]
+            }]
+        },
+        {
+            "description": "ctrl+w del word",
+            "manipulators": [{
+
+                "type": "basic",
+                "from": {
+                    "key_code": "w",
+                    "modifiers": {
+                        "mandatory": ["control"]
+                    }
+                },
+                "to": [{
+                    "key_code": "delete_or_backspace",
+                    "modifiers": ["option"]
+                }]
+            }]
+        },
+        {
+            "description": "ctrl+[ to Esc",
+            "manipulators": [{
+
+                "type": "basic",
+                "from": {
+                    "key_code": "open_bracket",
+                    "modifiers": {
+                        "mandatory": ["control"]
+                    }
+                },
+                "to": [{
+                    "key_code": "escape"
+                }]
+            }]
+        }
+    ]
+}
