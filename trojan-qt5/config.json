@@ -1,61 +1,123 @@
 {
     "api": {
-        "api_addr": "127.0.0.1",
-        "api_port": 57721,
-        "enabled": true
-    },
-    "buffer_size": 32,
-    "forward_proxy": {
-        "enabled": false,
-        "proxy_addr": "127.0.0.1",
-        "proxy_port": 1086
-    },
-    "local_addr": "127.0.0.1",
-    "local_port": 51837,
-    "log_file": "/Users/liukun/Library/Logs/Trojan-Qt5/core.log",
-    "log_level": 1,
-    "mux": {
-        "concurrency": 8,
-        "enabled": false,
-        "idle_timeout": 60
-    },
-    "password": [
-        "3m0615"
-    ],
-    "remote_addr": "baby.safemail.gq",
-    "remote_port": 443,
-    "router": {
-        "enabled": false
-    },
-    "run_type": "client",
-    "ssl": {
-        "alpn": [
-            "h2",
-            "http/1.1"
+        "services": [
+            "StatsService"
         ],
-        "cert": "",
-        "cipher": "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:AES128-SHA:AES256-SHA:DES-CBC3-SHA",
-        "cipher_tls13": "TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384",
-        "curves": "",
-        "fingerprint": "firefox",
-        "reuse_session": true,
-        "session_ticket": false,
-        "sni": "",
-        "verify": true,
-        "verify_hostname": true
+        "tag": "api"
     },
-    "tcp": {
-        "fast_open": false,
-        "fast_open_qlen": 20,
-        "keep_alive": true,
-        "no_delay": true,
-        "reuse_port": false
+    "inbounds": [
+        {
+            "listen": "127.0.0.1",
+            "port": 57721,
+            "protocol": "dokodemo-door",
+            "settings": {
+                "address": "127.0.0.1"
+            },
+            "tag": "api_in"
+        },
+        {
+            "listen": "127.0.0.1",
+            "port": 51837,
+            "protocol": "socks",
+            "settings": {
+                "auth": "noauth",
+                "ip": "127.0.0.1",
+                "udp": true
+            },
+            "tag": "inbound"
+        }
+    ],
+    "log": {
+        "access": "/Users/liukun/Library/Logs/Trojan-Qt5/core.log",
+        "error": "/Users/liukun/Library/Logs/Trojan-Qt5/core.log",
+        "level": "info"
     },
-    "websocket": {
-        "double_tls": false,
-        "enabled": false,
-        "hostname": "",
-        "obfuscation_password": "",
-        "path": ""
+    "outbounds": [
+        {
+            "mux": {
+                "concurrency": 8,
+                "enabled": false
+            },
+            "protocol": "vmess",
+            "sendThrough": "0.0.0.0",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "v2tem.safemail.gq",
+                        "port": 443,
+                        "users": [
+                            {
+                                "alterId": 2,
+                                "id": "c94b2632-a839-4925-8a95-2edef19564ae",
+                                "security": "auto",
+                                "testsEnabled": "none"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "tls",
+                "tlsSettings": {
+                    "allowInsecure": false,
+                    "allowInsecureCiphers": false,
+                    "alpn": [
+                    ],
+                    "serverName": "v2tem.safemail.gq"
+                },
+                "wsSettings": {
+                    "headers": {
+                        "Host": "v2tem.safemail.gq"
+                    },
+                    "path": "/53baa30/"
+                }
+            },
+            "tag": "proxy"
+        },
+        {
+            "protocol": "freedom",
+            "sendThrough": "0.0.0.0",
+            "settings": {
+                "domainStrategy": "AsIs",
+                "redirect": ":0",
+                "userLevel": 0
+            },
+            "streamSettings": {
+            },
+            "tag": "direct"
+        },
+        {
+            "protocol": "blackhole",
+            "sendThrough": "0.0.0.0",
+            "settings": {
+                "response": {
+                    "type": "none"
+                }
+            },
+            "streamSettings": {
+            },
+            "tag": "block"
+        }
+    ],
+    "policy": {
+        "system": {
+            "statsInboundDownlink": true,
+            "statsInboundUplink": true
+        }
+    },
+    "routing": {
+        "domainStrategy": "AsIs",
+        "rules": [
+            {
+                "inboundTag": [
+                    "api_in"
+                ],
+                "outboundTag": "api",
+                "type": "field"
+            }
+        ]
+    },
+    "stats": {
     }
 }
